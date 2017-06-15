@@ -13,6 +13,6 @@ public class UIFunctions : MonoBehaviour
 	public void Pull ()
 	{
 		ProjectManager.PM.RT = ProjectManager.RequestType.Pull;
-		ProjectManager.PM.Request ();
+        StartCoroutine(ProjectManager.PM.Request());
 	}
 }

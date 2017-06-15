@@ -28,10 +28,13 @@ public class ProjectManager : MonoBehaviour
 	{
 
 		//Getting the web service
-		WWW SallefnyWebService = new WWW ("http://sallefny.com/beta/public/api/product/1/owner");
+		//WWW SallefnyWebService = new WWW ("http://sallefny.com/beta/public/api/product/1/view");
+        WWW SallefnyWebService = new WWW("http://13.255.253.57:8000/api/products/10/view");
+        Debug.Log(SallefnyWebService);
 
 		yield return SallefnyWebService;
 
+        Debug.Log("Entered");
 		switch (RT) {
 		case RequestType.Post:
 			//InterActive Text to report what's happening
@@ -42,23 +45,20 @@ public class ProjectManager : MonoBehaviour
 			m_InterActiveText.text = " ";
 			break;
 		case RequestType.Pull:
-			//InterActive Text to report what's happening
-			m_InterActiveText.text = "Waiting for Data.";
+                //InterActive Text to report what's happening
+            Debug.Log("Waiting for Data.");
 			yield return new WaitForSeconds (1f);
-			m_InterActiveText.text = "Data received.";
+			Debug.Log("Data received.");
 			yield return new WaitForSeconds (1f);
 			m_InterActiveText.text = " ";
-			fn_MapJSON (SallefnyWebService.text);
+                Data lol = new Data();
+
+			lol = fn_MapJSON (SallefnyWebService.text);
+                Debug.Log(lol);
 			break;
 		default:
 			break;
 		}
-		//InterActive Text to report what's happening
-		m_InterActiveText.text = "Waiting for Data.";
-		yield return new WaitForSeconds (1f);
-		m_InterActiveText.text = "Data received.";
-		yield return new WaitForSeconds (1f);
-		m_InterActiveText.text = " ";
 
 	}
 
@@ -85,19 +85,21 @@ public class ProjectManager : MonoBehaviour
 		StartCoroutine (Request ());
 	}
 
-	void fn_MapJSON (string json)
+	static Data fn_MapJSON (string json)
 	{
-		//Maping json data to local class data
-		Data reusableData = JsonUtility.FromJson<Data> (json);
+        //Maping json data to local class data
+        Data lol = new Data();
+        //Debug.Log (JsonUtility.FromJson<Data> (json));
 
-		//Showing Data on Canvas (No data were sent to me!)
-        
+        return JsonUtility.FromJson<Data>(json);
+        //Showing Data on Canvas (No data were sent to me!)
+       // Debug.Log(reusableData);
 	}
 
 	public void fn_PushInfo ()
 	{
 		//Creating json object
-		string json = JsonUtility.ToJson (reusableData.m_ProductID);
+		string json = JsonUtility.ToJson (reusableData.id);
 
 		//Creating WWWform
 		WWWForm form = new WWWForm ();
@@ -110,10 +112,11 @@ public class ProjectManager : MonoBehaviour
 	}
 }
 
-[Serializable]
+[System.Serializable]
 class Data
 {
-    public int m_ProductID;
+    //2D array of products ... each product object has these parameters: -
+    public int id;
     public string m_OwnerName;
     public string m_OwnerEmail;
     public int m_OwnerNumber;
