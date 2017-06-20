@@ -28,9 +28,8 @@ public class ProjectManager : MonoBehaviour
 	{
 
 		//Getting the web service
-		//WWW SallefnyWebService = new WWW ("http://sallefny.com/beta/public/api/product/1/view");
-        WWW SallefnyWebService = new WWW("http://13.255.253.57:8000/api/products/10/view");
-        Debug.Log(SallefnyWebService);
+		WWW SallefnyWebService = new WWW ("http://sallefny.com/beta/public/api/product/1/view");
+        //WWW SallefnyWebService = new WWW("http://13.255.253.57:8000/api/products/10/view");
 
 		yield return SallefnyWebService;
 
@@ -50,11 +49,7 @@ public class ProjectManager : MonoBehaviour
 			yield return new WaitForSeconds (1f);
 			Debug.Log("Data received.");
 			yield return new WaitForSeconds (1f);
-			m_InterActiveText.text = " ";
-                Data lol = new Data();
-
-			lol = fn_MapJSON (SallefnyWebService.text);
-                Debug.Log(lol);
+                Debug.Log(SallefnyWebService.text);
 			break;
 		default:
 			break;
