@@ -62,8 +62,16 @@ public class ProjectManager : MonoBehaviour
 		m_InterActiveText.text = " ";
 	}
 
-	// Use this for initialization
-	void Start ()
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus == true)
+        {
+            RT = RequestType.Pull;
+            StartCoroutine(Request());
+        }
+    }
+    // Use this for initialization
+    void Start ()
 	{
         DontDestroyOnLoad(PM);
         if (PM == null || PM != this)
