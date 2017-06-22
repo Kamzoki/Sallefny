@@ -22,13 +22,13 @@ public class ProjectManager : MonoBehaviour
 	[HideInInspector]
 	public RequestType RT = new RequestType ();
 	private string url;
-	private Data reusableData;
+	private Product reusableData;
 
 	public IEnumerator Request ()
 	{
 
 		//Getting the web service
-		WWW SallefnyWebService = new WWW ("http://sallefny.com/beta/public/api/product/1/view");
+		WWW SallefnyWebService = new WWW ("http://sallefny.com/beta/public/api/products/11/view");
         //WWW SallefnyWebService = new WWW("http://13.255.253.57:8000/api/products/10/view");
 
 		yield return SallefnyWebService;
@@ -50,6 +50,7 @@ public class ProjectManager : MonoBehaviour
 			Debug.Log("Data received.");
 			yield return new WaitForSeconds (1f);
                 Debug.Log(SallefnyWebService.text);
+                fn_MapJSON(SallefnyWebService.text);
 			break;
 		default:
 			break;
@@ -88,16 +89,27 @@ public class ProjectManager : MonoBehaviour
 		StartCoroutine (Request ());
 	}
 
-	static Data fn_MapJSON (string json)
+	static void fn_MapJSON (string json)
 	{
         //Maping json data to local class data
-        Data lol = new Data();
-        //Debug.Log (JsonUtility.FromJson<Data> (json));
-
-        return JsonUtility.FromJson<Data>(json);
-        //Showing Data on Canvas (No data were sent to me!)
-       // Debug.Log(reusableData);
-	}
+        Product lol = JsonUtility.FromJson<Product>(json);
+        Debug.Log(lol.id);
+        Debug.Log(lol.name);
+        Debug.Log(lol.price);
+        Debug.Log(lol.image);
+        Debug.Log(lol.created_at);
+        Debug.Log("user:- ");
+        Debug.Log(lol.user.id);
+        Debug.Log(lol.user.name);
+        Debug.Log(lol.user.phone);
+        Debug.Log(lol.user.email);
+        Debug.Log(lol.user.birthdate);
+        Debug.Log(lol.user.gender);
+        Debug.Log(lol.user.lat);
+        Debug.Log(lol.user.lon);
+        Debug.Log(lol.user.created_at);
+        Debug.Log(lol.user.updated_at);
+    }
 
 	public void fn_PushInfo ()
 	{
@@ -116,24 +128,28 @@ public class ProjectManager : MonoBehaviour
 }
 
 [System.Serializable]
-class Data
+class Product
 {
-    //2D array of products ... each product object has these parameters: -
     public int id;
-    public string m_OwnerName;
-    public string m_OwnerEmail;
-    public int m_OwnerNumber;
-    public string m_OwnerGender;
-    public Sprite m_OwnerPicture;
+    public string name;
+    public int price;
+    public string image;
+    public string created_at;
+    public User user;
+}
 
-   /* public Data(int PID, string ON, string OE, int ONU, string OG, Sprite OP)
-    {
-        this.m_ProductID = PID;
-        this.m_OwnerName = ON;
-        this.m_OwnerEmail = OE;
-        this.m_OwnerNumber = ONU;
-        this.m_OwnerGender = OG;
-        this.m_OwnerPicture = OP;
-    }*/
-	
+[System.Serializable]
+class User
+{
+    public int id;
+    public string name;
+    public string email;
+    public string phone;
+    public string birthdate;
+    public string gender;
+    public string photo;
+    public float lat;
+    public float lon;
+    public string created_at;
+    public string updated_at;
 }
